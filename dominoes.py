@@ -3,40 +3,49 @@ import random
 
 class Dominoes:
     def __init__(self):
-        self.full_set = [[a, b] for b in range(7) for a in range(7) if a <= b]
-        self.doubles = [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6]]
-        self.stock_pieces = []
-        self.computer_pieces = self.player_pieces = []
+        self.set = [[a, b] for b in range(7) for a in range(7) if a <= b]
+        self.doubles = [[a, a] for a in range(7)]
+        self.stock = []
+        self.computer = self.player = self.snake = []
         self.status = ""
 
     def shuffle(self):
-        self.stock_pieces = []
-        while all(x not in self.doubles for x in self.stock_pieces):
-            self.stock_pieces = random.sample(self.full_set, 14)
+        random.shuffle(self.set)
+        while all(x not in self.doubles for x in self.set[:14]):
+            random.shuffle(self.set)
+        self.stock = self.set[14:]
+        self.computer = self.set[:7]
+        self.player = self.set[7:14]
 
-        self.computer_pieces = self.stock_pieces[:7]
-        self.player_pieces = self.stock_pieces[7:]
-
-    def snake(self):
-        self.snake_piece = max(i for i in self.doubles if i in self.stock_pieces)
-        if self.snake_piece in self.computer_pieces:
-            self.computer_pieces.remove(self.snake_piece)
+    def find_snake(self):
+        self.snake = [max(i for i in self.doubles if i in self.set[:14])]
+        if self.snake[0] in self.computer:
+            self.computer.remove(self.snake[0])
             self.status = "player"
-        if self.snake_piece in self.player_pieces:
-            self.player_pieces.remove(self.snake_piece)
-            self.status = "status"
+        else:
+            self.player.remove(self.snake[0])
+            self.status = "computer"
+
+
+def game():
+    Game = Dominoes()
+    Game.shuffle()
+    Game.find_snake()
+
+    print("=" * 70)
+    print(
+        f"""Stock size: {len(Game.stock)}
+Computer pieces: {len(Game.computer)}
+
+{Game.snake[0]}
+
+Your pieces:
+"""
+    )
+    for i in range(len(Game.player)):
+        print(f'{i+1}:{Game.player[i]}')
 
 
 if __name__ == "__main__":
-    game = Dominoes()
-    game.shuffle()
-    game.snake()
+    game()
 
-    print(
-        f"""Stock pieces: {game.stock_pieces}
-Computer pieces: {game.computer_pieces}
-Player pieces: {game.player_pieces}
-Domino snake: {[game.snake_piece]}
-Status: {game.status}
-"""
-    )
