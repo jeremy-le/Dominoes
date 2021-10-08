@@ -1,43 +1,46 @@
-
-
 class Domino:
-    """Class for objects that represent one domino tile. Has two ends
-     marked with an integer value, usually from 0 to 6"""
+    """Class object representing one domino tile with two ends marked by a number of pips.
+
+    Args:
+        left (int): value of left end
+        right (int): value of right end
+    """
 
     def __init__(self, left: int, right: int):
-        """:input pair: a pair of two values (l, r) for domino ends."""
+      
         self._left = left
         self._right = right
 
     @property
     def left(self) -> int:
-        """returns the number of pips on the left side"""
+        """returns number of pips on the left end"""
         return self._left
 
     @property
     def right(self) -> int:
-        """returns the number of pips on the right side"""
+        """returns the number of pips on the right end"""
         return self._right
 
     @property
     def is_double(self) -> bool:
-        """returns true if numbers on either end are the same"""
+        """returns true if pips on both ends are equal"""
         return self._left == self._right
 
     @property
     def is_single(self) -> bool:
-        """returns true if numbers on either end are different from each other"""
+        """returns true if pips on both ends are unique """
         return self._left != self._right
 
     @property
     def rank(self) -> int:
-        """returns the rank/weight of the domino (sum of numbers)"""
+        """returns the rank/weight of the domino (sum of pips)"""
         return self._left + self._right
 
     def flip(self):
-        """flips the domino so what was on the right is now on the left,
-        and what was on the left is now on the right."""
+        """flips the orientation of the domino tile, ends are reversed"""
         return Domino(self._right, self._left)
+
+##############################  COMPARISON MAGIC METHODS  ##############################
 
     def __gt__(self, other) -> bool:
         return self.rank > other.rank
@@ -51,9 +54,11 @@ class Domino:
     def __contains__(self, pip: int) -> bool:
         return pip in [self._left, self._right]
 
-    def __str__(self):
+###############################  REPRESENTATION METHODS  ###############################
+
+    def __str__(self) -> str:
         """[left, right]"""
         return f'[{self._left}, {self._right}]'
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str(self)
