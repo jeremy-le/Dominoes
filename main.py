@@ -17,7 +17,7 @@ class Game():
     def __init__(self):
 
         self.status = ''
-        self.comp_com = None
+        self.ai = self.ai_select = self.ai_tile = self.select = self.play_tile = None
         self._deck = self.create_deck()
         self._initial = self.high_double
         self.boneyard = self.make_boneyard()
@@ -25,6 +25,7 @@ class Game():
         self.computer = self.deal_computer()
         self.remove_initial()
         self.snake = self.create_snake()
+####################################  INIT METHODS  ####################################
 
     @property
     def high_double(self):
@@ -53,14 +54,14 @@ class Game():
     def create_snake(self):
         return Snake(self.high_double)
 
-########################################################################################
+##################################   GAME LOGIC   ######################################
 
     def command(self):
         if self.status == 'computer':
             # Press Enter -> perform computer action -> switch status
             input(
                 "Status: The computer is about to make a move. Press Enter to continue.")
-            self.computer_action()
+            self.computer_action(self.computer_ai())
             self.status = 'player'
         elif self.status == 'player':
             #  Enter command -> perform player action -> switch status
@@ -70,7 +71,20 @@ class Game():
     def player_prompt(self) -> int:
         while True:
             try:
-                command = int(input("Status: It's your turn to make a move. Enter your command."))
+                command = int(
+                    input("Status: It's your turn to make a move. Enter your command.\n"))
+            except ValueError:
+                print("Invalid input. Please try again.")
+            else:
+                if (-1 * len(self.player)) <= command <= len(self.player):
+                    return command
+                else:
+                    print("Invalid input. Please try again.")
+
+    def illegal_prompt(self) -> int:
+        while True:
+            try:
+                command = int(input("Illegal move. Please try again.\n"))
             except ValueError:
                 print("Invalid input. Please try again.")
             else:
@@ -82,20 +96,80 @@ class Game():
     def player_action(self, command):
         if command == 0:
             self.player.draw(self.boneyard.draw())
-        elif command > 0:
-            self.snake.add_right(self.player.play(command-1))
-        elif command < 0:
-            self.snake.add_left(self.player.play(abs(command)-1))
 
-    def computer_action(self):
-        """computer chooses a random command and plays it"""
-        self.comp_com = randint(-1 * len(self.computer), len(self.computer))
-        if self.comp_com == 0:
+        else:
+            self.select = abs(command)-1
+            if not self.legal_check(command):
+                self.player_action(self.illegal_prompt())
+
+            elif command > 0:
+                self.snake.add_right(self.flip_tile(command))
+            elif command < 0:
+                self.snake.add_left(self.flip_tile(command))
+
+    def computer_ai(self):
+        self.ai = randint(-1 * len(self.computer), len(self.computer))
+        return self.ai
+
+    def computer_action(self, command):
+        if command == 0:
             self.computer.draw(self.boneyard.draw())
-        elif self.comp_com > 0:
-            self.snake.add_right(self.computer.play(self.comp_com-1))
-        elif self.comp_com < 0:
-            self.snake.add_left(self.computer.play(abs(self.comp_com)-1))
+        else:
+            self.ai_select = abs(command)-1
+            if not self.legal_check(command):
+                self.computer_action(self.computer_ai())
+            elif self.ai > 0:
+                self.snake.add_right(self.flip_tile(command))
+            elif self.ai < 0:
+                self.snake.add_left(self.flip_tile(command))
+
+##################################   GAME RULES   ######################################
+
+    def legal_check(self, command):
+        """At this point, only checks legality of piece but does not play yet (remove from hand)"""
+        if self.status == 'player':
+            if command > 0:
+                # only indexes domino
+                return self.snake[-1].right in self.player[self.select]
+            elif command < 0:
+                return self.snake[0].left in self.player[self.select]
+        elif self.status == 'computer':
+            if command > 0:
+                return self.snake[-1].right in self.computer[self.ai_select]
+            elif command < 0:
+                return self.snake[0].left in self.computer[self.ai_select]
+
+    def flip_tile(self, command):
+        """Legal piece, therefore flip if required"""
+        if self.status == 'player':
+            # This removes the piece from hand
+            self.play_tile = self.player.play(self.select)
+            if command > 0:
+                if self.snake[-1].right != self.play_tile.left:
+                    return self.play_tile.flip()
+                else:
+                    return self.play_tile
+            elif command < 0:
+                if self.snake[0].left != self.play_tile.right:
+                    return self.play_tile.flip()
+                else:
+                    return self.play_tile
+
+        elif self.status == 'computer':
+            self.ai_tile = self.computer.play(self.ai_select)
+            if command > 0:
+                if self.snake[-1].right != self.ai_tile.left:
+                    return self.ai_tile.flip()
+                else:
+                    return self.ai_tile
+            elif command < 0:
+                if self.snake[0].left != self.ai_tile.right:
+                    return self.ai_tile.flip()
+                else:
+                    return self.ai_tile
+
+
+######################################  DISPLAY  #######################################
 
     def list_pieces(self):
         for i in range(len(self.player)):
@@ -113,14 +187,15 @@ class Game():
         self.list_pieces()
 
 ########################################################################################
-    
+
     def draw_condition(self) -> bool:
         """Checks if both ends of snake are the same and that there are at least 8
         occurences of that number"""
-        if self.snake[0].left != self.snake[-1].right: return False
+        if self.snake[0].left != self.snake[-1].right:
+            return False
 
         all_pips = [self.snake[_].left for _ in range(len(self.snake))] + \
-        [self.snake[_].right for _ in range(len(self.snake))]
+            [self.snake[_].right for _ in range(len(self.snake))]
         return all_pips.count(self.snake[0].left) == 8
 
     def empty_hand(self) -> bool:
@@ -128,6 +203,7 @@ class Game():
         return len(self.computer) == 0 or len(self.player) == 0
 
 ########################################################################################
+
     def play(self):
         while not self.draw_condition() and not self.empty_hand():
             self.screen()
@@ -143,6 +219,7 @@ class Game():
 def main():
     game = Game()
     game.play()
+
 
 if __name__ == "__main__":
     main()
