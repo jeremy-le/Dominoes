@@ -94,10 +94,7 @@ class Game():
                     print("Invalid input. Please try again.")
 
     def player_action(self, command):
-        if command == 0:
-            self.player.draw(self.boneyard.draw())
-
-        else:
+        if command != 0:
             self.select = abs(command)-1
             if not self.legal_check(command):
                 self.player_action(self.illegal_prompt())
@@ -107,21 +104,27 @@ class Game():
             elif command < 0:
                 self.snake.add_left(self.flip_tile(command))
 
+        elif len(self.boneyard) > 0:
+            self.player.draw(self.boneyard.draw())
+
+
     def computer_ai(self):
         self.ai = randint(-1 * len(self.computer), len(self.computer))
         return self.ai
 
     def computer_action(self, command):
-        if command == 0:
-            self.computer.draw(self.boneyard.draw())
-        else:
+        if command != 0:
             self.ai_select = abs(command)-1
             if not self.legal_check(command):
                 self.computer_action(self.computer_ai())
+                
             elif self.ai > 0:
                 self.snake.add_right(self.flip_tile(command))
             elif self.ai < 0:
                 self.snake.add_left(self.flip_tile(command))
+
+        elif len(self.boneyard) > 0:
+            self.computer.draw(self.boneyard.draw())
 
 ##################################   GAME RULES   ######################################
 
