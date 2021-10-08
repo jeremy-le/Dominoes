@@ -1,3 +1,5 @@
+from domino import Domino
+
 class Hand():
     def __init__(self, domlist=[]):
         self.hand = domlist
@@ -5,10 +7,7 @@ class Hand():
 
     def play(self, index: int):
         """Removes one tile from hand using index"""
-        # if index in range(len(self.hand)):
         return self.hand.pop(index)
-        # else:
-        #     print('Invalid command')
 
     def draw(self, domino):
         """Adds a new tile to hand, usually from boneyard"""

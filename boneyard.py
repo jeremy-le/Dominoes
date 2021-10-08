@@ -2,6 +2,7 @@ from random import randint
 
 
 class BoneYard():
+
     def __init__(self, domlist=[]):
         self.boneyard = domlist
         self.index = 0
