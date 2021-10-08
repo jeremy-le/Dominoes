@@ -12,6 +12,12 @@ class Snake:
         if all(_ for _ in list_ if isinstance(_, Domino)):
             self.snake += list_
 
+    def add_to(self, domino, side='right'):
+        if side == 'right':
+            return self.snake.append(domino)
+        elif side == 'left':
+            return self.snake.insert(0, domino)
+
     def add_right(self, domino):
         return self.snake.append(domino)
 
