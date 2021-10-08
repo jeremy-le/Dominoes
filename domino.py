@@ -40,6 +40,11 @@ class Domino:
         """flips the orientation of the domino tile, ends are reversed"""
         return Domino(self._right, self._left)
 
+    def return_list(self):
+        """returns a llist representation of the domino"""
+        return [self._left, self._right]
+
+
 ##############################  COMPARISON MAGIC METHODS  ##############################
 
     def __gt__(self, other) -> bool:
