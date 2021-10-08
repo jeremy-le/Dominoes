@@ -17,6 +17,9 @@ class Hand():
         """Similar to play but does not return domino"""
         self.hand.remove(domino)
 
+    def return_list(self):
+        return self.hand
+
     def __len__(self) -> int:
         return len(self.hand)
 

@@ -28,6 +28,9 @@ class Snake:
         self.snake = []
         return self.snake
 
+    def return_list(self) -> list:
+        return self.snake
+
     def __len__(self) -> int:
         return len(self.snake)
 
