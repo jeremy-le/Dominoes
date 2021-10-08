@@ -209,10 +209,13 @@ class Game():
             self.screen()
             self.command()
         if self.draw_condition():
+            self.screen()
             print("Status: The game is over, it's a draw")
         elif len(self.player) == 0:
+            self.screen()
             print("Status: The game is over. You won!")
         elif len(self.computer) == 0:
+            self.screen()
             print("Status: The game is over. You lost!")
 
 
