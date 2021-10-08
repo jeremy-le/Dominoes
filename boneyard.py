@@ -5,10 +5,12 @@ class BoneYard():
 
     def __init__(self, domlist=[]):
         self.boneyard = domlist
-        self.index = 0
-
+    
     def draw(self):
-        return self.boneyard.pop(randint(0, len(self.boneyard)))
+        if self.boneyard > 0:
+            return self.boneyard.pop(randint(0, (len(self.boneyard)-1)))
+        else:
+            return None
 
     def __len__(self):
         return len(self.boneyard)
