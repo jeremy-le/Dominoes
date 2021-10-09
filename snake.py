@@ -5,8 +5,7 @@ class Snake:
     def __init__(self, domino=None):
         """Only a single domino can be used to intialise the snake"""
         self.snake = [domino] if isinstance(domino, Domino) else []
-        
-        self.index = 0
+
 
     def add_list(self, list_):
         """This method can be used to add a list of dominos after object has been created"""
@@ -53,9 +52,13 @@ class Snake:
     def __contains__(self, domino) -> bool:
         return domino in self.snake
 
+    def __iter__(self):
+        self._index = 0
+        return self
+        
     def __next__(self):
-        if self.index >= len(self.snake):
+        if self._index >= len(self.snake):
             raise StopIteration
-        index = self.index
-        self.index += 1
-        return self.snake[index]
+        i = self._index
+        self._index += 1
+        return self.snake[i]

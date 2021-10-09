@@ -3,7 +3,6 @@ from domino import Domino
 class Hand():
     def __init__(self, domlist=[]):
         self.hand = domlist
-        self.index = 0
         self._astuple = self.return_astuple()
 
     def play(self, index: int):
@@ -34,14 +33,15 @@ class Hand():
         return self.hand[index]
 
     def __iter__(self):
+        self._index = 0
         return self
 
     def __next__(self):
-        if self.index >= len(self.hand):
+        if self._index >= len(self.hand):
             raise StopIteration
-        index = self.index
-        self.index += 1
-        return self.hand[index]
+        i = self._index
+        self._index += 1
+        return self.hand[i]
 
     def __str__(self):
         return f'{self.hand}'
