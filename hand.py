@@ -4,6 +4,7 @@ class Hand():
     def __init__(self, domlist=[]):
         self.hand = domlist
         self.index = 0
+        self._astuple = self.return_astuple()
 
     def play(self, index: int):
         """Removes one tile from hand using index"""
@@ -17,9 +18,12 @@ class Hand():
         """Similar to play but does not return domino"""
         self.hand.remove(domino)
 
-    def return_list(self):
+    def return_aslist(self):
         return self.hand
 
+    def return_astuple(self):
+        return tuple(self.hand)
+        
     def __len__(self) -> int:
         return len(self.hand)
 

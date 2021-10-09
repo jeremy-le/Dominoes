@@ -5,6 +5,7 @@ class Snake:
     def __init__(self, domino=None):
         """Only a single domino can be used to intialise the snake"""
         self.snake = [domino] if isinstance(domino, Domino) else []
+        
         self.index = 0
 
     def add_list(self, list_):
@@ -28,8 +29,11 @@ class Snake:
         self.snake = []
         return self.snake
 
-    def return_list(self) -> list:
+    def return_aslist(self) -> list:
         return self.snake
+
+    def return_astuple(self) -> tuple:
+        return tuple(self.snake)
 
     def __len__(self) -> int:
         return len(self.snake)
