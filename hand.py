@@ -1,6 +1,7 @@
 from domino import Domino
 
-class Hand():
+
+class Hand:
     def __init__(self, domlist=[]):
         self.hand = domlist
         self._astuple = self.as_tuple()
@@ -22,7 +23,7 @@ class Hand():
 
     def as_tuple(self):
         return tuple(self.hand)
-        
+
     def __len__(self) -> int:
         return len(self.hand)
 
@@ -44,7 +45,7 @@ class Hand():
         return self.hand[i]
 
     def __str__(self):
-        return f'{self.hand}'
+        return f"{self.hand}"
 
     def __repr__(self):
         return str(self)

@@ -6,16 +6,15 @@ class Snake:
         """Only a single domino can be used to intialise the snake"""
         self.snake = [domino] if isinstance(domino, Domino) else []
 
-
     def add_list(self, list_):
         """This method can be used to add a list of dominos after object has been created"""
         if all(_ for _ in list_ if isinstance(_, Domino)):
             self.snake += list_
 
-    def add_to(self, domino, side='right'):
-        if side == 'right':
+    def add_to(self, domino, side="right"):
+        if side == "right":
             return self.snake.append(domino)
-        elif side == 'left':
+        elif side == "left":
             return self.snake.insert(0, domino)
 
     def add_right(self, domino):
@@ -42,9 +41,9 @@ class Snake:
 
     def __str__(self) -> str:
         if len(self.snake) > 6:
-            return f'{self[0]}{self[1]}{self[2]}...{self[-3]}{self[-2]}{self[-1]}'
+            return f"{self[0]}{self[1]}{self[2]}...{self[-3]}{self[-2]}{self[-1]}"
         else:
-            return ''.join(str(d) for d in self.snake)
+            return "".join(str(d) for d in self.snake)
 
     def __repr__(self) -> str:
         return str(self)

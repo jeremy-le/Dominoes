@@ -7,7 +7,7 @@ class Domino:
     """
 
     def __init__(self, left: int, right: int):
-      
+
         self._left = left
         self._right = right
         self._aslist = self.as_list()
@@ -30,7 +30,7 @@ class Domino:
 
     @property
     def is_single(self) -> bool:
-        """returns true if pips on both ends are unique """
+        """returns true if pips on both ends are unique"""
         return self._left != self._right
 
     @property
@@ -49,9 +49,8 @@ class Domino:
     def as_tuple(self):
         return (self._left, self._right)
 
+    ##############################  COMPARISON MAGIC METHODS  ##############################
 
-##############################  COMPARISON MAGIC METHODS  ##############################
-    
     def __contains__(self, pip: int) -> bool:
         return pip in [self._left, self._right]
 
@@ -75,14 +74,11 @@ class Domino:
         self._index += 1
         return self._aslist[i]
 
-        
-
-
-###############################  REPRESENTATION METHODS  ###############################
+    ###############################  REPRESENTATION METHODS  ###############################
 
     def __str__(self) -> str:
         """[left, right]"""
-        return f'[{self._left}, {self._right}]'
+        return f"[{self._left}, {self._right}]"
 
     def __repr__(self) -> str:
         return str(self)
