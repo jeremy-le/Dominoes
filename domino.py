@@ -10,6 +10,8 @@ class Domino:
       
         self._left = left
         self._right = right
+        self._aslist = self.return_aslist()
+        self._astuple = self.return_astuple()
 
     @property
     def left(self) -> int:
@@ -40,12 +42,18 @@ class Domino:
         """flips the orientation of the domino tile, ends are reversed"""
         return Domino(self._right, self._left)
 
-    def return_list(self):
+    def return_aslist(self):
         """returns a llist representation of the domino"""
         return [self._left, self._right]
 
+    def return_astuple(self):
+        return (self._left, self._right)
+
 
 ##############################  COMPARISON MAGIC METHODS  ##############################
+    
+    def __contains__(self, pip: int) -> bool:
+        return pip in [self._left, self._right]
 
     def __gt__(self, other) -> bool:
         return self.rank > other.rank
@@ -56,8 +64,8 @@ class Domino:
     def __eq__(self, other) -> bool:
         return sorted([self._left, self._right]) == sorted([other._left, other._right])
 
-    def __contains__(self, pip: int) -> bool:
-        return pip in [self._left, self._right]
+    def __hash__(self) -> int:
+        return hash(tuple(sorted(self._aslist)))
 
 ###############################  REPRESENTATION METHODS  ###############################
 
