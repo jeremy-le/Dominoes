@@ -3,7 +3,7 @@ from domino import Domino
 class Hand():
     def __init__(self, domlist=[]):
         self.hand = domlist
-        self._astuple = self.return_astuple()
+        self._astuple = self.as_tuple()
 
     def play(self, index: int):
         """Removes one tile from hand using index"""
@@ -17,10 +17,10 @@ class Hand():
         """Similar to play but does not return domino"""
         self.hand.remove(domino)
 
-    def return_aslist(self):
+    def as_list(self):
         return self.hand
 
-    def return_astuple(self):
+    def as_tuple(self):
         return tuple(self.hand)
         
     def __len__(self) -> int:

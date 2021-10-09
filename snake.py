@@ -28,10 +28,10 @@ class Snake:
         self.snake = []
         return self.snake
 
-    def return_aslist(self) -> list:
+    def as_list(self) -> list:
         return self.snake
 
-    def return_astuple(self) -> tuple:
+    def as_tuple(self) -> tuple:
         return tuple(self.snake)
 
     def __len__(self) -> int:
@@ -55,7 +55,7 @@ class Snake:
     def __iter__(self):
         self._index = 0
         return self
-        
+
     def __next__(self):
         if self._index >= len(self.snake):
             raise StopIteration
